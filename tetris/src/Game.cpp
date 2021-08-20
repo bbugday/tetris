@@ -59,7 +59,12 @@ const sf::Color Game::colors[TypeCount] = {
 	sf::Color::Color(0, 122, 195) 
 };
 
-Game::Game(sf::RenderWindow& window) : mWindow(window), mPiece(3, 0), timePerDrop(0.5f), score(0)
+Game::Game(sf::RenderWindow& window) 
+	: mWindow(window)
+	, mPiece(3, 0)
+	, timePerDrop(0.5f)
+	, score(0)
+	, end(false)
 {
 	loadTextures();
 	loadFonts();
@@ -82,9 +87,7 @@ void Game::update(sf::Time dt)
 			if (DoesFit(newPiece.type, 3, 0, newPiece.rotation))
 				mPiece = std::move(newPiece);
 			else
-			{
-				//end game
-			}
+				end = true;
 		}
         mDropClock.restart();
     }
@@ -265,6 +268,10 @@ void Game::drawScore()
 	mWindow.draw(ScoreText);
 }
 
+bool Game::didEnd()
+{
+	return end;
+}
 
 void Game::handleEvent(const sf::Event& event)
 {

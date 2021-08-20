@@ -4,6 +4,7 @@
 #include <State/StateIdentifiers.h>
 #include <State/MenuState.h>
 #include <State/GameState.h>
+#include <State/EndState.h>
 
 const sf::Time Application::TimePerFrame = sf::seconds(1.f / 60.f);
 
@@ -79,4 +80,5 @@ void Application::registerStates()
 {
 	mStateStack.registerState<MenuState>(States::Menu);
 	mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<EndState>(States::End);
 }

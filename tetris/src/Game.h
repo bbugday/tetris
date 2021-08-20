@@ -25,6 +25,8 @@ public:
 	void update(sf::Time dt);
 	void draw();
 	void handleEvent(const sf::Event& event);
+
+	bool didEnd();
 private:
 	void loadTextures();
 	void loadFonts();
@@ -45,6 +47,7 @@ private:
 	Piece mPiece;
 	float timePerDrop;
 	int score;
+	bool end;
 
 	sf::RenderWindow& mWindow;
 	TextureHolder mTextures;

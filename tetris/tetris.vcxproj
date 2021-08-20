@@ -154,6 +154,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\State\EndState.cpp" />
     <ClCompile Include="src\State\GameState.cpp" />
     <ClCompile Include="src\State\MenuState.cpp" />
     <ClCompile Include="src\State\State.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="src\Piece.h" />
     <ClInclude Include="src\ResourceHandling\ResourceHolder.h" />
     <ClInclude Include="src\ResourceHandling\ResourceIdentifiers.h" />
+    <ClInclude Include="src\State\EndState.h" />
     <ClInclude Include="src\State\GameState.h" />
     <ClInclude Include="src\State\MenuState.h" />
     <ClInclude Include="src\State\State.h" />

@@ -14,6 +14,10 @@ void GameState::draw()
 bool GameState::update(sf::Time dt)
 {
 	mGame.update(dt);
+
+	if (mGame.didEnd())
+		requestStackPush(States::End);
+
 	return true;
 }
 
