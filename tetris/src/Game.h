@@ -27,11 +27,14 @@ public:
 	void handleEvent(const sf::Event& event);
 private:
 	void loadTextures();
+	void loadFonts();
 
 	int rotate(int px, int py, int r);
 	bool DoesFit(int type, int nPosX, int nPosY, int nRotation);
 	void lockPiece();
 	void removeLines();
+	void drawBoard();
+	void drawScore();
 private:
 	static constexpr unsigned int WIDTH = 10;
 	static constexpr unsigned int HEIGHT = 20;
@@ -41,8 +44,10 @@ private:
 	std::array<int, WIDTH * HEIGHT> mBoard;
 	Piece mPiece;
 	float timePerDrop;
+	int score;
 
 	sf::RenderWindow& mWindow;
 	TextureHolder mTextures;
+	FontHolder mFonts;
 	sf::Clock mDropClock;
 };

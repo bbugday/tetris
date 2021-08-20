@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 #include <Utility.h>
 
@@ -58,9 +59,10 @@ const sf::Color Game::colors[TypeCount] = {
 	sf::Color::Color(0, 122, 195) 
 };
 
-Game::Game(sf::RenderWindow& window) : mWindow(window), mPiece(3, 0), timePerDrop(0.5f)
+Game::Game(sf::RenderWindow& window) : mWindow(window), mPiece(3, 0), timePerDrop(0.5f), score(0)
 {
 	loadTextures();
+	loadFonts();
     mBoard.fill({});
 }
 
@@ -103,6 +105,7 @@ void Game::removeLines()
 
 			if (clear)
 			{
+				score++;
 				for (int i = 0; i < WIDTH; i++)
 					mBoard[firstIndexOfLine + i] = 0;
 
@@ -166,6 +169,12 @@ void Game::draw()
 	sf::Sprite background(mTextures.get(Textures::Background));
 	mWindow.draw(background);
 
+	drawBoard();
+	drawScore();
+}
+
+void Game::drawBoard()
+{
 	sf::RectangleShape area(sf::Vector2f(261.f, 521.f));
 	area.setPosition(270.f, 40.f);
 	area.setFillColor(sf::Color::Black);
@@ -188,7 +197,7 @@ void Game::draw()
 		line.setFillColor(sf::Color::Color(35, 35, 35));
 		mWindow.draw(line);
 	}
-	
+
 	//draw current piece
 	for (int px = 0; px < 4; px++)
 		for (int py = 0; py < 4; py++)
@@ -218,7 +227,7 @@ void Game::draw()
 	while (DoesFit(mPiece.type, mPiece.x, mPiece.y + maxDrop + 1, mPiece.rotation))
 		maxDrop++;
 
-	if(maxDrop != 0)
+	if (maxDrop != 0)
 		for (int px = 0; px < 4; px++)
 			for (int py = 0; py < 4; py++)
 				if (tetromino[mPiece.type][rotate(px, py, mPiece.rotation)] != 0)
@@ -231,6 +240,31 @@ void Game::draw()
 					mWindow.draw(square);
 				}
 }
+
+void Game::drawScore()
+{
+	sf::RectangleShape area(sf::Vector2f(150.f, 85.f));
+	area.setPosition(80.f, 80.f);
+	area.setFillColor(sf::Color::Black);
+	mWindow.draw(area);
+
+	sf::Font& font = mFonts.get(Fonts::Main);
+	sf::Text ScoreLabel;
+	ScoreLabel.setFont(font);
+	ScoreLabel.setString("Score");
+	centerOrigin(ScoreLabel);
+	ScoreLabel.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 2.f, 55.f);
+	mWindow.draw(ScoreLabel);
+
+	sf::Text ScoreText;
+	ScoreText.setFont(font);
+	ScoreText.setString(std::to_string(score));
+	centerOrigin(ScoreText);
+	ScoreText.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 2.f, 
+		area.getGlobalBounds().top + area.getLocalBounds().height / 2.f);
+	mWindow.draw(ScoreText);
+}
+
 
 void Game::handleEvent(const sf::Event& event)
 {
@@ -265,4 +299,9 @@ void Game::handleEvent(const sf::Event& event)
 void Game::loadTextures()
 {
 	mTextures.load(Textures::Background, "res/textures/background.jpg");
+}
+
+void Game::loadFonts()
+{
+	mFonts.load(Fonts::Main, "res/fonts/Sansation.ttf");
 }
