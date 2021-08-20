@@ -36,6 +36,7 @@ private:
 	static constexpr unsigned int WIDTH = 10;
 	static constexpr unsigned int HEIGHT = 20;
 	static const int tetromino[TypeCount][16];
+	static const sf::Color colors[TypeCount];
 
 	std::array<int, WIDTH * HEIGHT> mBoard;
 	Piece mPiece;

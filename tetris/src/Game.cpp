@@ -51,6 +51,13 @@ const int Game::tetromino[TypeCount][16] = {
 		}
 };
 
+const sf::Color Game::colors[TypeCount] = {
+	sf::Color::Color(0, 185, 208), sf::Color::Color(175, 0, 213),			 
+	sf::Color::Color(228, 209, 0), sf::Color::Color(213, 0, 0),
+	sf::Color::Color(0, 221, 84) , sf::Color::Color(208, 148, 0), 
+	sf::Color::Color(0, 122, 195) 
+};
+
 Game::Game(sf::RenderWindow& window) : mWindow(window), mPiece(3, 0), timePerDrop(0.5f)
 {
 	loadTextures();
@@ -188,8 +195,8 @@ void Game::draw()
 			if (tetromino[mPiece.type][rotate(px, py, mPiece.rotation)] != 0)
 			{
 				sf::RectangleShape square(sf::Vector2f(25.f, 25.f));
-				square.setPosition(271.f + 26 * (px + mPiece.x), (41.f) + 26 * (mPiece.y + py));
-				square.setFillColor(sf::Color::Red);
+				square.setPosition(271.f + 26 * (px + mPiece.x), 41.f + 26 * (mPiece.y + py));
+				square.setFillColor(colors[mPiece.type]);
 				mWindow.draw(square);
 			}
 
@@ -200,8 +207,8 @@ void Game::draw()
 			if (mBoard[i * WIDTH + j] != 0)
 			{
 				sf::RectangleShape square(sf::Vector2f(25.f, 25.f));
-				square.setPosition(271.f + 26 * j, (41.f) + 26 * i);
-				square.setFillColor(sf::Color::Red);
+				square.setPosition(271.f + 26 * j, 41.f + 26 * i);
+				square.setFillColor(colors[mBoard[i * WIDTH + j] - 1]);
 				mWindow.draw(square);
 			}
 		}
@@ -217,7 +224,7 @@ void Game::draw()
 				if (tetromino[mPiece.type][rotate(px, py, mPiece.rotation)] != 0)
 				{
 					sf::RectangleShape square(sf::Vector2f(25.f, 25.f));
-					square.setOutlineColor(sf::Color::Blue);
+					square.setOutlineColor(colors[mPiece.type]);
 					square.setOutlineThickness(1.f);
 					square.setPosition(271.f + 26 * (px + mPiece.x), (41.f) + 26 * (mPiece.y + py + maxDrop));
 					square.setFillColor(sf::Color::Transparent);
