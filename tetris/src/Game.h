@@ -35,8 +35,10 @@ private:
 	bool DoesFit(int type, int nPosX, int nPosY, int nRotation);
 	void lockPiece();
 	void removeLines();
+	void generateNext();
 	void drawBoard();
 	void drawScore();
+	void drawNext();
 private:
 	static constexpr unsigned int WIDTH = 10;
 	static constexpr unsigned int HEIGHT = 20;
@@ -48,6 +50,8 @@ private:
 	float timePerDrop;
 	int score;
 	bool end;
+	int nextType;
+	int nextRotation;
 
 	sf::RenderWindow& mWindow;
 	TextureHolder mTextures;

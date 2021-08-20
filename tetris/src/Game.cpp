@@ -69,6 +69,15 @@ Game::Game(sf::RenderWindow& window)
 	loadTextures();
 	loadFonts();
     mBoard.fill({});
+
+	generateNext();
+}
+
+void Game::generateNext()
+{
+	srand(time(NULL));
+	nextType = rand() % TypeCount;
+	nextRotation = rand() % 4;
 }
 
 void Game::update(sf::Time dt)
@@ -82,10 +91,13 @@ void Game::update(sf::Time dt)
 			lockPiece();
 			removeLines();
 
-			Piece newPiece(3, 0);
+			Piece newPiece(nextType, 3, 0, nextRotation);
 
 			if (DoesFit(newPiece.type, 3, 0, newPiece.rotation))
+			{
 				mPiece = std::move(newPiece);
+				generateNext();
+			}
 			else
 				end = true;
 		}
@@ -174,6 +186,7 @@ void Game::draw()
 
 	drawBoard();
 	drawScore();
+	drawNext();
 }
 
 void Game::drawBoard()
@@ -238,7 +251,7 @@ void Game::drawBoard()
 					sf::RectangleShape square(sf::Vector2f(25.f, 25.f));
 					square.setOutlineColor(colors[mPiece.type]);
 					square.setOutlineThickness(1.f);
-					square.setPosition(271.f + 26 * (px + mPiece.x), (41.f) + 26 * (mPiece.y + py + maxDrop));
+					square.setPosition(271.f + 26 * (px + mPiece.x), 41.f + 26 * (mPiece.y + py + maxDrop));
 					square.setFillColor(sf::Color::Transparent);
 					mWindow.draw(square);
 				}
@@ -252,12 +265,12 @@ void Game::drawScore()
 	mWindow.draw(area);
 
 	sf::Font& font = mFonts.get(Fonts::Main);
-	sf::Text ScoreLabel;
-	ScoreLabel.setFont(font);
-	ScoreLabel.setString("Score");
-	centerOrigin(ScoreLabel);
-	ScoreLabel.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 2.f, 55.f);
-	mWindow.draw(ScoreLabel);
+	sf::Text scoreLabel;
+	scoreLabel.setFont(font);
+	scoreLabel.setString("Score");
+	centerOrigin(scoreLabel);
+	scoreLabel.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 2.f, 55.f);
+	mWindow.draw(scoreLabel);
 
 	sf::Text ScoreText;
 	ScoreText.setFont(font);
@@ -266,6 +279,34 @@ void Game::drawScore()
 	ScoreText.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 2.f, 
 		area.getGlobalBounds().top + area.getLocalBounds().height / 2.f);
 	mWindow.draw(ScoreText);
+}
+
+void Game::drawNext()
+{
+	sf::RectangleShape area(sf::Vector2f(150.f, 150.f));
+	area.setPosition(80.f, 220.f);
+	area.setFillColor(sf::Color::Black);
+	mWindow.draw(area);
+
+	sf::Font& font = mFonts.get(Fonts::Main);
+	sf::Text nextLabel;
+	nextLabel.setFont(font);
+	nextLabel.setString("Next");
+	centerOrigin(nextLabel);
+	nextLabel.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 2.f, 190.f);
+	mWindow.draw(nextLabel);
+
+	for (int px = 0; px < 4; px++)
+		for (int py = 0; py < 4; py++)
+			if (tetromino[nextType][rotate(px, py, nextRotation)] != 0)
+			{
+				sf::RectangleShape square(sf::Vector2f(25.f, 25.f));
+				centerOrigin(square);
+				square.setPosition(area.getGlobalBounds().left + area.getLocalBounds().width / 4.f + 26 * px, 
+					area.getGlobalBounds().top + area.getLocalBounds().height / 4.f + 26 * py);
+				square.setFillColor(colors[nextType]);
+				mWindow.draw(square);
+			}
 }
 
 bool Game::didEnd()
